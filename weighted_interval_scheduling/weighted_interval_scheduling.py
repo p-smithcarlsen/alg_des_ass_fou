@@ -1,17 +1,25 @@
-def opt(x: int) -> int:
+def opt(x: int):
+    if W[x] != -1:
+        res = W[x]
+    
+
     if x == 0:
-        return intervals[0]
+        res = intervals[0][2]
     elif x == 1:
-        return intervals[1]
+        res = intervals[1][2]
     else:
-        max(opt(x-1), opt(x-2))
+        take = intervals[x][2] + intervals[x-2][2]
+        drop = intervals[x-1][2]
+        res = max(take, drop)
+    return res
 
 N = int(input())
-intervals = []
+intervals = [None] * N
+W = [-1] * N
 
-for _ in range(N):
+for i in range(N):
     next_interval = tuple(map(int, input().split()))
-    intervals.append(next_interval)
+    intervals[i] = next_interval
 
-intervals.sort(key = lambda intv: intv[1], reverse = True)
-opt(N)
+intervals.sort(key=lambda intv: intv[1])
+print(opt(N-1))
